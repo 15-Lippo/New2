@@ -1,9 +1,15 @@
 [build]
   # Disattivo completamente qualsiasi processo di build
   # e pubblico direttamente l'HTML statico
-  base = "."
-  publish = "."
-  command = "echo 'Skipping build phase'"
+  base = "New1-master"
+  command = "npm install -g pnpm && pnpm install && cd apps/platform && pnpm build"
+  publish = "New1-master/apps/platform/dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+  PNPM_VERSION = "8.6.12"
+  NPM_FLAGS = "--no-frozen-lockfile"
+  NETLIFY_USE_PNPM = "true"
 
 [[redirects]]
   from = "/*"
