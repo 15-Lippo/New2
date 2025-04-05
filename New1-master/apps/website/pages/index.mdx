@@ -1,8 +1,11 @@
 ---
-title: 'Gamba'
-description: 'Build your own web3 games with Gamba, a decentralized betting platform on Solana'
+title: Gamba Framework
 ---
 
-import { Home } from '../components/home';
+import { HomePage } from '@/components/home'
 
-<Home />
+<HomePage />
+
+export default function MDXPage({ children }) {
+  return <>{children}</>
+}

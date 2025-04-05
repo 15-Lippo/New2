@@ -1,6 +1,6 @@
 [build]
   base = "."
-  command = "pnpm install --no-frozen-lockfile && cd apps/website && NEXT_TELEMETRY_DISABLED=1 pnpm build && cp -r public/_redirects out/"
+  command = "pnpm install --no-frozen-lockfile && cd apps/website && npm run build && mkdir -p out/_next && touch out/_redirects && echo '/* /index.html 200' > out/_redirects"
   publish = "apps/website/out"
 
 [build.environment]
@@ -11,15 +11,12 @@
   NEXT_BUNDLE_EXTERNALS = "false"
   NODE_OPTIONS = "--max-old-space-size=4096"
 
-# Disabilitiamo il plugin Next.js per evitare conflitti con l'output statico
-# [[plugins]]
-#  package = "@netlify/plugin-nextjs"
+# Completamente rimossi i plugin per Next.js
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = true
 
 [functions]
   external_node_modules = ["gamba-core-v2"]
