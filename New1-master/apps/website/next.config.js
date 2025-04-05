@@ -10,6 +10,7 @@ const nextConfig = {
   },
   output: 'export',
   trailingSlash: true,
+  distDir: 'out',
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

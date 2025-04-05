@@ -18,6 +18,7 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  force = true
 
 [functions]
   external_node_modules = ["gamba-core-v2"]
