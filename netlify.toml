@@ -2,14 +2,13 @@
   # Disattivo completamente qualsiasi processo di build
   # e pubblico direttamente l'HTML statico
   base = "New1-master"
-  command = "npm install -g pnpm && pnpm install && cd apps/platform && pnpm build"
+  command = "mkdir -p apps/platform/dist && cp -r index.html apps/platform/dist/ && cp -r _redirects apps/platform/dist/"
   publish = "New1-master/apps/platform/dist"
 
 [build.environment]
   NODE_VERSION = "18"
-  PNPM_VERSION = "8.6.12"
-  NPM_FLAGS = "--no-frozen-lockfile"
-  NETLIFY_USE_PNPM = "true"
+  VITE_RPC_ENDPOINT = "https://api.mainnet-beta.solana.com"
+  VITE_HELIUS_API_KEY = "98f90e5e-ea37-4624-b353-ad83e642237a"
 
 [[headers]]
   for = "/*"
