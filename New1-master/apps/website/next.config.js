@@ -9,8 +9,8 @@ const nextConfig = {
     unoptimized: true,
   },
   output: 'export',
-  basePath: process.env.NODE_ENV === 'production' ? '/New1-master' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/New1-master/' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/New2' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/New2/' : '',
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
