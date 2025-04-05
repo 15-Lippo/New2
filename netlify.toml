@@ -11,6 +11,20 @@
   NPM_FLAGS = "--no-frozen-lockfile"
   NETLIFY_USE_PNPM = "true"
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Permetti le richieste cross-origin per le API wallet
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"
+    # Abilita tutte le funzionalità necessarie
+    Feature-Policy = "camera 'none'; microphone 'none'; payment 'self'"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    X-Content-Type-Options = "nosniff"
+    # Permetti il caricamento di worker e script esterni
+    Content-Security-Policy = "default-src 'self' https: wss: blob: data: 'unsafe-inline' 'unsafe-eval'"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
