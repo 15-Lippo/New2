@@ -1,7 +1,7 @@
 [build]
   base = "."
   command = "echo 'Bypassing build step'"
-  publish = "New1-master/apps/website/public"
+  publish = "apps/website/public"
 
 [build.environment]
   NODE_VERSION = "18"
