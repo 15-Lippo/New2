@@ -1,0 +1,13 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "cd ../.. && pnpm install && pnpm build --filter=website...",
+  "outputDirectory": ".next",
+  "installCommand": "pnpm install",
+  "regions": ["cdg1"],
+  "builds": [
+    {
+      "src": "next.config.js",
+      "use": "@vercel/next"
+    }
+  ]
+}

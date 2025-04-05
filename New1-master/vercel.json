@@ -1,0 +1,14 @@
+{
+  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm turbo run build --filter=website^...",
+  "outputDirectory": "apps/website/.next",
+  "framework": "nextjs",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "builds": [
+    {
+      "src": "apps/website/next.config.js",
+      "use": "@vercel/next"
+    }
+  ],
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./apps/website/",
+  "regions": ["all"]
+}
