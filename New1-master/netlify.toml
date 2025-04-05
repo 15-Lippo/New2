@@ -1,6 +1,6 @@
 [build]
   base = "."
-  command = "pnpm install --no-frozen-lockfile && NEXT_TELEMETRY_DISABLED=1 pnpm turbo run build --filter=website^..."
+  command = "pnpm install --no-frozen-lockfile && cd apps/website && NEXT_TELEMETRY_DISABLED=1 pnpm build && cp -r public/_redirects out/"
   publish = "apps/website/out"
 
 [build.environment]
@@ -11,8 +11,9 @@
   NEXT_BUNDLE_EXTERNALS = "false"
   NODE_OPTIONS = "--max-old-space-size=4096"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+# Disabilitiamo il plugin Next.js per evitare conflitti con l'output statico
+# [[plugins]]
+#  package = "@netlify/plugin-nextjs"
 
 [[redirects]]
   from = "/*"
