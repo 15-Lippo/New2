@@ -1,10 +1,7 @@
 [build]
-  base = "."
-  command = "echo 'Bypassing build step'"
-  publish = "apps/website/public"
-
-[build.environment]
-  NODE_VERSION = "18"
+  # Disattiva completamente il processo di build
+  command = "cp -r apps/website/public/* ."
+  publish = "."
 
 # Redirezione fallback
 [[redirects]]
