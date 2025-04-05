@@ -1,7 +1,7 @@
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 import '@solana/wallet-adapter-react-ui/styles.css'
-import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets'
+import { BackpackWalletAdapter, BraveWalletAdapter, PhantomWalletAdapter, SolflareWalletAdapter, TorusWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { GambaPlatformProvider, TokenMetaProvider } from 'gamba-react-ui-v2'
 import { GambaProvider, SendTransactionProvider } from 'gamba-react-v2'
 import React from 'react'
@@ -18,15 +18,27 @@ function Root() {
     () => [
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
+      new BackpackWalletAdapter(),
+      new BraveWalletAdapter(),
+      new TorusWalletAdapter(),
     ],
     [],
   )
+
+  // Aggiungi un effetto per inizializzare il wallet quando la pagina si carica
+  React.useEffect(() => {
+    // Crea un piccolo ritardo prima di tentare la connessione automatica
+    const timer = setTimeout(() => {
+      console.log("Tentativo di connessione automatica al wallet...")
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <BrowserRouter>
       <ConnectionProvider
         endpoint={RPC_ENDPOINT}
-        config={{ commitment: 'processed' }}
+        config={{ commitment: 'confirmed', confirmTransactionInitialTimeout: 60000 }}
       >
         <WalletProvider autoConnect wallets={wallets}>
           <WalletModalProvider>

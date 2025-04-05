@@ -1,7 +1,7 @@
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { GambaUi, useReferral } from 'gamba-react-ui-v2'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal } from '../components/Modal'
 import { PLATFORM_ALLOW_REFERRER_REMOVAL, PLATFORM_REFERRAL_FEE } from '../constants'
 import { useToast } from '../hooks/useToast'
@@ -81,12 +81,36 @@ export function UserButton() {
   const walletModal = useWalletModal()
   const wallet = useWallet()
   const user = useUserStore()
+  const toast = useToast()
+
+  useEffect(() => {
+    if (wallet.connected) {
+      toast({
+        title: '✅ Wallet connesso',
+        description: `Connesso a ${truncateString(wallet.publicKey?.toBase58() || '', 4)}`,
+      })
+    }
+  }, [wallet.connected, wallet.publicKey, toast])
 
   const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect()
-    } else {
-      walletModal.setVisible(true)
+    try {
+      if (wallet.wallet) {
+        wallet.connect().catch(error => {
+          console.error("Errore durante la connessione:", error);
+          toast({
+            title: '❌ Errore di connessione',
+            description: 'Non è stato possibile connettersi al wallet. Riprova.',
+          })
+        });
+      } else {
+        walletModal.setVisible(true)
+      }
+    } catch (error) {
+      console.error("Errore durante la connessione:", error);
+      toast({
+        title: '❌ Errore di connessione',
+        description: 'Errore imprevisto. Riprova più tardi.',
+      })
     }
   }
 
@@ -102,13 +126,13 @@ export function UserButton() {
           >
             <div style={{ display: 'flex', gap: '.5em', alignItems: 'center' }}>
               <img src={wallet.wallet?.adapter.icon} height="20px" />
-              {truncateString(wallet.publicKey?.toBase58(), 3)}
+              {truncateString(wallet.publicKey?.toBase58() || '', 3)}
             </div>
           </GambaUi.Button>
         </div>
       ) : (
         <GambaUi.Button onClick={connect}>
-          {wallet.connecting ? 'Connecting' : 'Connect'}
+          {wallet.connecting ? 'Connessione in corso...' : 'Connetti Wallet'}
         </GambaUi.Button>
       )}
     </>
