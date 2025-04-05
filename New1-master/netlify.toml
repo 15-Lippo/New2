@@ -1,7 +1,7 @@
 [build]
   base = "."
   command = "pnpm install --no-frozen-lockfile && NEXT_TELEMETRY_DISABLED=1 pnpm turbo run build --filter=website^..."
-  publish = "apps/website/.next"
+  publish = "apps/website/out"
 
 [build.environment]
   NODE_VERSION = "18"
@@ -13,6 +13,11 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [functions]
   external_node_modules = ["gamba-core-v2"]
