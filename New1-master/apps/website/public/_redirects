@@ -1,7 +1,10 @@
-# Netlify redirects per Single Page Applications
-/* /index.html 200
+# Redirect per Single Page Applications (SPA)
+/*    /index.html   200
 
-# Fallback per tutte le altre rotte
-/api/* /api/:splat 200
-/docs/* /docs/index.html 200
-/games/* /games/index.html 200 
+# Redirect specifici per percorsi comuni
+/docs/*    /index.html   200
+/games/*   /index.html   200
+/api/*     /api/:splat   200
+
+# Fallback per altri percorsi
+/index     /index.html   200 

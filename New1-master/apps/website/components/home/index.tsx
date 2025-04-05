@@ -5,7 +5,7 @@ import Tilt from 'react-parallax-tilt'
 import { projects as allProjects } from '../projects'
 import { GameCard } from './gameCard'
 
-export function Home() {
+export function HomePage() {
   const [randomProjects, setRandomProjects] = useState<any[]>([])
   const [fadeStates, setFadeStates] = useState<string[]>([]) // e.g. ['fade-in', 'fade-in', ...]
 
