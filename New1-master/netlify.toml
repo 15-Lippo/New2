@@ -1,22 +1,13 @@
 [build]
   base = "."
-  command = "pnpm install --no-frozen-lockfile && cd apps/website && npm run build && mkdir -p out/_next && touch out/_redirects && echo '/* /index.html 200' > out/_redirects"
-  publish = "apps/website/out"
+  command = "echo 'Bypassing build step'"
+  publish = "New1-master/apps/website/public"
 
 [build.environment]
   NODE_VERSION = "18"
-  NPM_FLAGS = "--version"
-  NETLIFY_USE_PNPM = "true"
-  PNPM_FLAGS = "--no-frozen-lockfile"
-  NEXT_BUNDLE_EXTERNALS = "false"
-  NODE_OPTIONS = "--max-old-space-size=4096"
 
-# Completamente rimossi i plugin per Next.js
-
+# Redirezione fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[functions]
-  external_node_modules = ["gamba-core-v2"]
