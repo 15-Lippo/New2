@@ -1,6 +1,9 @@
 [build]
-  base = "New1-master"
-  publish = "New1-master"
+  # Disattivo completamente qualsiasi processo di build
+  # e pubblico direttamente l'HTML statico
+  base = "."
+  publish = "."
+  command = "echo 'Skipping build phase'"
 
 [[redirects]]
   from = "/*"
