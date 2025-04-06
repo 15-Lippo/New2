@@ -1,19 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lisprocoin Gaming Platform</title>
-  <link rel="icon" href="https://gamba.so/favicon.ico" />
+  <title>Lisprocoin Gaming - Giochi On-Chain su Solana</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #8851ff;
+      --secondary-color: #45caff;
+      --background-color: #0D0E12;
+      --card-bg: #1A1B23;
+      --text-color: #FFFFFF;
+    }
+    
     body {
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #0D0E12;
-      color: white;
+      background-color: var(--background-color);
+      color: var(--text-color);
     }
+    
     .loading {
       display: flex;
       flex-direction: column;
@@ -22,21 +30,159 @@
       height: 100vh;
       text-align: center;
     }
+    
     .spinner {
       border: 4px solid rgba(255, 255, 255, 0.1);
       border-radius: 50%;
-      border-top: 4px solid #8851ff;
+      border-top: 4px solid var(--primary-color);
       width: 40px;
       height: 40px;
       animation: spin 1s linear infinite;
       margin-bottom: 20px;
     }
+    
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    #gamba-app {
-      min-height: 100vh;
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: rgba(26, 27, 35, 0.8);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo img {
+      height: 32px;
+      margin-right: 10px;
+    }
+    
+    .wallet-button {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .wallet-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .main-content {
+      padding: 6rem 2rem 2rem;
+    }
+    
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .game-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .game-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .game-image {
+      width: 100%;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    
+    .game-info {
+      padding: 1rem;
+    }
+    
+    .game-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    
+    .game-description {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: var(--card-bg);
+      width: 90%;
+      max-width: 900px;
+      height: 80vh;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .close-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      z-index: 10;
+    }
+    
+    .game-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
   </style>
 </head>
@@ -45,44 +191,161 @@
     <div class="spinner"></div>
     <h2>Caricamento della piattaforma Lisprocoin...</h2>
   </div>
-  <div id="gamba-app"></div>
+  
+  <div id="app" style="display: none;">
+    <header class="header">
+      <div class="logo">
+        <img src="https://raw.githubusercontent.com/15-Lippo/new/master/logo.png" alt="Lisprocoin Logo">
+        Lisprocoin Gaming
+      </div>
+      <button id="wallet-button" class="wallet-button">Connetti Wallet</button>
+    </header>
+    
+    <main class="main-content">
+      <h1>Giochi On-Chain su Solana</h1>
+      <p>Prova i nostri giochi on-chain sviluppati sulla blockchain Solana. Gioca, divertiti e vinci!</p>
+      
+      <div class="games-grid">
+        <div class="game-card" onclick="openGame('slots')">
+          <div class="game-image" style="background-color: #2A2C36;">
+            <img src="https://play.gamba.so/assets/slots.png" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Slots</div>
+            <div class="game-description">Gira i rulli e cerca di ottenere combinazioni vincenti in questa slot machine!</div>
+          </div>
+        </div>
+        
+        <div class="game-card" onclick="openGame('dice')">
+          <div class="game-image" style="background-color: #2A2C36;">
+            <img src="https://play.gamba.so/assets/dice.png" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Dice</div>
+            <div class="game-description">Scommetti sul risultato del lancio di dadi e vinci fino a 100x la tua puntata!</div>
+          </div>
+        </div>
+        
+        <div class="game-card" onclick="openGame('flip')">
+          <div class="game-image" style="background-color: #2A2C36;">
+            <img src="https://play.gamba.so/assets/flip.png" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Flip</div>
+            <div class="game-description">Lancia una moneta e raddoppia la tua puntata se indovini il risultato!</div>
+          </div>
+        </div>
+        
+        <div class="game-card" onclick="openGame('blackjack')">
+          <div class="game-image" style="background-color: #2A2C36;">
+            <img src="https://play.gamba.so/assets/blackjack.png" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Blackjack</div>
+            <div class="game-description">Gioca a blackjack contro il banco e cerca di ottenere 21 o un valore più alto del banco!</div>
+          </div>
+        </div>
+        
+        <div class="game-card" onclick="openGame('crash')">
+          <div class="game-image" style="background-color: #2A2C36;">
+            <img src="https://play.gamba.so/assets/crash.png" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Crash</div>
+            <div class="game-description">Guarda il moltiplicatore salire e ritira prima che si schianti!</div>
+          </div>
+        </div>
+        
+        <div class="game-card" onclick="openGame('hilo')">
+          <div class="game-image" style="background-color: #2A2C36;">
+            <img src="https://play.gamba.so/assets/hilo.png" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div class="game-info">
+            <div class="game-title">HiLo</div>
+            <div class="game-description">Indovina se la prossima carta sarà più alta o più bassa!</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <div id="game-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-button" onclick="closeGame()">✕</button>
+      <iframe id="game-frame" class="game-frame" src="" frameborder="0"></iframe>
+    </div>
+  </div>
 
   <script>
-    // Configurazione per la piattaforma
-    window.GAMBA_PLATFORM_CONFIG = {
+    // Configurazione della piattaforma
+    const PLATFORM_CONFIG = {
       RPC_ENDPOINT: "https://api.mainnet-beta.solana.com",
-      PLATFORM_CREATOR_ADDRESS: "EPqPP8mSk4bFNfk5cAg9hGR6XPLwh9Rp3Lo4wDiLEdRZ",
-      PLATFORM_CREATOR_FEE: 0.01,
-      PLATFORM_JACKPOT_FEE: 0.001,
-      PLATFORM_REFERRAL_FEE: 0.0025,
-      ALLOW_REFERRER_REMOVAL: true
+      CREATOR_ADDRESS: "EPqPP8mSk4bFNfk5cAg9hGR6XPLwh9Rp3Lo4wDiLEdRZ",
+      CREATOR_FEE: 0.01,
+      JACKPOT_FEE: 0.001,
+      REFERRAL_FEE: 0.0025
     };
-
-    // Carica lo script Gamba da CDN
-    function loadGambaScript() {
-      const script = document.createElement('script');
-      script.src = "https://cdn.jsdelivr.net/gh/gamba-labs/platform@latest/dist/bundle.js";
-      script.onload = function() {
-        // Nasconde il caricamento quando è pronto
+    
+    // Mappatura dei giochi e loro URL
+    const GAMES = {
+      slots: "https://play.gamba.so/slots",
+      dice: "https://play.gamba.so/dice",
+      flip: "https://play.gamba.so/flip",
+      blackjack: "https://play.gamba.so/blackjack",
+      crash: "https://play.gamba.so/crash",
+      hilo: "https://play.gamba.so/hilo"
+    };
+    
+    // Funzione per aprire un gioco in modalità
+    function openGame(gameId) {
+      const modal = document.getElementById('game-modal');
+      const gameFrame = document.getElementById('game-frame');
+      const gameUrl = GAMES[gameId] + "?creator=" + PLATFORM_CONFIG.CREATOR_ADDRESS;
+      
+      gameFrame.src = gameUrl;
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // Funzione per chiudere il gioco
+    function closeGame() {
+      const modal = document.getElementById('game-modal');
+      const gameFrame = document.getElementById('game-frame');
+      
+      modal.style.display = 'none';
+      gameFrame.src = '';
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Simulazione di caricamento
+    window.addEventListener('load', function() {
+      setTimeout(function() {
         document.getElementById('loading').style.display = 'none';
-      };
-      script.onerror = function() {
-        document.getElementById('loading').innerHTML = '<h2>Errore di caricamento. Riprova.</h2>';
-      };
-      document.body.appendChild(script);
-    }
-
-    // Carica lo stile Gamba da CDN
-    function loadGambaStyle() {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = "https://cdn.jsdelivr.net/gh/gamba-labs/platform@latest/dist/style.css";
-      document.head.appendChild(link);
-    }
-
-    // Inizia il caricamento
-    loadGambaStyle();
-    loadGambaScript();
+        document.getElementById('app').style.display = 'block';
+      }, 1000);
+    });
+    
+    // Gestione del wallet
+    document.getElementById('wallet-button').addEventListener('click', function() {
+      // Apre Phantom o altro wallet
+      if (window.solana && window.solana.isPhantom) {
+        window.solana.connect();
+        this.textContent = 'Connessione...';
+        
+        window.solana.on('connect', function() {
+          document.getElementById('wallet-button').textContent = 'Wallet Connesso';
+        });
+      } else {
+        window.open('https://phantom.app/', '_blank');
+      }
+    });
+    
+    // Controlla se il wallet è già connesso all'avvio
+    window.addEventListener('load', function() {
+      if (window.solana && window.solana.isPhantom && window.solana.isConnected) {
+        document.getElementById('wallet-button').textContent = 'Wallet Connesso';
+      }
+    });
   </script>
 </body>
 </html> 
