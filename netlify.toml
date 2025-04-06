@@ -1,28 +1,22 @@
 [build]
-  # Disattivo completamente qualsiasi processo di build
-  # e pubblico direttamente l'HTML statico
-  base = "New1-master"
-  command = "mkdir -p apps/platform/dist && cp -r index.html apps/platform/dist/ && cp -r _redirects apps/platform/dist/"
-  publish = "New1-master/apps/platform/dist"
+  # Skip build process
+  command = "echo 'Pubblicazione statica senza build'"
+  publish = "."
 
 [build.environment]
   NODE_VERSION = "18"
-  VITE_RPC_ENDPOINT = "https://api.mainnet-beta.solana.com"
-  VITE_HELIUS_API_KEY = "98f90e5e-ea37-4624-b353-ad83e642237a"
 
 [[headers]]
   for = "/*"
   [headers.values]
-    # Permetti le richieste cross-origin per le API wallet
+    # Permetti le richieste cross-origin
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, POST, OPTIONS"
     Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"
-    # Abilita tutte le funzionalità necessarie
-    Feature-Policy = "camera 'none'; microphone 'none'; payment 'self'"
-    Referrer-Policy = "no-referrer-when-downgrade"
+    # Sicurezza
     X-Content-Type-Options = "nosniff"
-    # Permetti il caricamento di worker e script esterni
-    Content-Security-Policy = "default-src 'self' https: wss: blob: data: 'unsafe-inline' 'unsafe-eval'"
+    # Permetti il caricamento di script esterni
+    Content-Security-Policy = "default-src 'self' https: wss: blob: data: 'unsafe-inline' 'unsafe-eval'; connect-src *;"
 
 [[redirects]]
   from = "/*"

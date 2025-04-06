@@ -3,80 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gamba Framework</title>
+  <title>Lisprocoin Gaming Platform</title>
+  <link rel="icon" href="https://gamba.so/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       margin: 0;
       padding: 0;
-      color: #333;
-      background-color: #f5f5f5;
+      font-family: 'Inter', sans-serif;
+      background-color: #0D0E12;
+      color: white;
+    }
+    .loading {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       text-align: center;
     }
-    .container {
-      max-width: 800px;
-      padding: 2rem;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid #8851ff;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
     }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      background: linear-gradient(to right, #8851ff, #45caff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
-    p {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-    .buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-top: 2rem;
-    }
-    .button {
-      display: inline-block;
-      padding: 0.8rem 1.5rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    .primary {
-      background: linear-gradient(to right, #8851ff, #45caff);
-      color: white;
-      border: none;
-    }
-    .secondary {
-      background: transparent;
-      color: #8851ff;
-      border: 2px solid #8851ff;
-    }
-    .button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    #gamba-app {
+      min-height: 100vh;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Gamba Framework</h1>
-    <p>Build on-chain games on Solana</p>
-    <p>Gamba provides tools for building & playing games directly on-chain. Get started with our documentation or explore our examples.</p>
-    
-    <div class="buttons">
-      <a href="https://explorer.gamba.so" class="button primary" target="_blank">Explore ✨</a>
-      <a href="https://github.com/gamba-labs" class="button secondary" target="_blank">GitHub</a>
-    </div>
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <h2>Caricamento della piattaforma Lisprocoin...</h2>
   </div>
+  <div id="gamba-app"></div>
+
+  <script>
+    // Configurazione per la piattaforma
+    window.GAMBA_PLATFORM_CONFIG = {
+      RPC_ENDPOINT: "https://api.mainnet-beta.solana.com",
+      PLATFORM_CREATOR_ADDRESS: "EPqPP8mSk4bFNfk5cAg9hGR6XPLwh9Rp3Lo4wDiLEdRZ",
+      PLATFORM_CREATOR_FEE: 0.01,
+      PLATFORM_JACKPOT_FEE: 0.001,
+      PLATFORM_REFERRAL_FEE: 0.0025,
+      ALLOW_REFERRER_REMOVAL: true
+    };
+
+    // Carica lo script Gamba da CDN
+    function loadGambaScript() {
+      const script = document.createElement('script');
+      script.src = "https://cdn.jsdelivr.net/gh/gamba-labs/platform@latest/dist/bundle.js";
+      script.onload = function() {
+        // Nasconde il caricamento quando è pronto
+        document.getElementById('loading').style.display = 'none';
+      };
+      script.onerror = function() {
+        document.getElementById('loading').innerHTML = '<h2>Errore di caricamento. Riprova.</h2>';
+      };
+      document.body.appendChild(script);
+    }
+
+    // Carica lo stile Gamba da CDN
+    function loadGambaStyle() {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = "https://cdn.jsdelivr.net/gh/gamba-labs/platform@latest/dist/style.css";
+      document.head.appendChild(link);
+    }
+
+    // Inizia il caricamento
+    loadGambaStyle();
+    loadGambaScript();
+  </script>
 </body>
 </html> 
