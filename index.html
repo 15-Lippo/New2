@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lisprocoin - Play and Win</title>
+  <title>Lisprocoin Gaming</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.19.16/lib/index.iife.min.js"></script>
   <style>
     :root {
-      --main-bg: #040404;
-      --card-bg: #0c0c0c;
-      --card-hover: #151515;
+      --main-bg: #000000;
+      --card-bg: #111111;
+      --card-hover: #1a1a1a;
       --text: #ffffff;
-      --accent: #16F795;
-      --button: #16F795;
-      --button-text: #000000;
-      --border-radius: 10px;
+      --accent: #4e44ce;
+      --button: #8851ff;
+      --button-hover: #7540ff;
+      --button-text: #ffffff;
+      --border-radius: 8px;
+      --secondary-text: rgba(255, 255, 255, 0.7);
     }
     
     * {
@@ -49,7 +51,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 20px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
     
     .logo {
@@ -57,6 +59,7 @@
       font-weight: 700;
       display: flex;
       align-items: center;
+      color: #6e73ff;
     }
     
     .logo img {
@@ -75,7 +78,7 @@
       color: var(--button-text);
       border: none;
       padding: 10px 20px;
-      border-radius: var(--border-radius);
+      border-radius: 50px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -83,47 +86,43 @@
     }
     
     .wallet-btn:hover {
-      opacity: 0.9;
+      background-color: var(--button-hover);
       transform: translateY(-2px);
     }
     
     /* Hero Section */
     .hero {
-      padding: 50px 0;
-      text-align: center;
+      padding: 70px 0 50px;
+      text-align: left;
     }
     
     .hero h1 {
       font-size: 42px;
       margin-bottom: 20px;
-      background: linear-gradient(90deg, #16F795 0%, #16F795 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: white;
     }
     
     .hero p {
       font-size: 18px;
       margin-bottom: 30px;
       max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      opacity: 0.8;
+      opacity: 0.7;
     }
     
     /* Games Section */
     .games-section {
-      padding: 50px 0;
+      padding: 30px 0;
     }
     
     .section-title {
       font-size: 24px;
       margin-bottom: 30px;
-      text-align: center;
+      display: none;
     }
     
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
     }
     
@@ -136,25 +135,24 @@
     }
     
     .game-card:hover {
-      transform: translateY(-10px);
+      transform: translateY(-5px);
       background-color: var(--card-hover);
-      box-shadow: 0 10px 30px rgba(22, 247, 149, 0.1);
     }
     
     .game-image {
       width: 100%;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 16 / 9;
       position: relative;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #0f0f0f;
+      background-color: #1a1a1a;
     }
     
     .game-image img {
-      width: 75%;
-      height: 75%;
+      width: 60%;
+      height: 60%;
       object-fit: contain;
     }
     
@@ -165,24 +163,13 @@
     .game-title {
       font-size: 18px;
       font-weight: 600;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
     
-    .game-subtitle {
+    .game-description {
       font-size: 14px;
-      opacity: 0.6;
-    }
-    
-    .new-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: var(--accent);
-      color: #000;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 5px 10px;
-      border-radius: 20px;
+      color: var(--secondary-text);
+      line-height: 1.4;
     }
     
     /* Footer */
@@ -190,7 +177,7 @@
       text-align: center;
       padding: 30px 0;
       margin-top: 50px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
       font-size: 14px;
       opacity: 0.7;
     }
@@ -203,7 +190,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(0, 0, 0, 0.9);
       z-index: 1000;
       align-items: center;
       justify-content: center;
@@ -212,8 +199,8 @@
     .modal-content {
       background-color: var(--card-bg);
       width: 95%;
-      max-width: 1000px;
-      height: 85vh;
+      max-width: 1200px;
+      height: 90vh;
       border-radius: var(--border-radius);
       position: relative;
       overflow: hidden;
@@ -259,8 +246,8 @@
     .spinner {
       width: 50px;
       height: 50px;
-      border: 5px solid rgba(22, 247, 149, 0.2);
-      border-top: 5px solid var(--accent);
+      border: 5px solid rgba(106, 90, 205, 0.2);
+      border-top: 5px solid var(--button);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-bottom: 20px;
@@ -272,7 +259,13 @@
     }
     
     /* Mobile Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
+      .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 600px) {
       .hero h1 {
         font-size: 32px;
       }
@@ -282,7 +275,7 @@
       }
       
       .games-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: 1fr;
       }
       
       .game-title {
@@ -295,7 +288,7 @@
   <!-- Loading Overlay -->
   <div class="loading-overlay" id="loading">
     <div class="spinner"></div>
-    <h2>Caricamento Lisprocoin Games...</h2>
+    <h2>Caricamento della piattaforma Lisprocoin...</h2>
   </div>
   
   <div class="container">
@@ -303,22 +296,21 @@
     <header class="header">
       <div class="logo">
         <img src="https://raw.githubusercontent.com/15-Lippo/new/master/logo.png" alt="Lisprocoin Logo">
-        Lisprocoin Games
+        Lisprocoin Gaming
       </div>
       <div class="header-right">
-        <button class="wallet-btn" id="wallet-btn">Connetti Wallet</button>
+        <button class="wallet-btn" id="wallet-btn">Connessione...</button>
       </div>
     </header>
     
     <!-- Hero Section -->
     <section class="hero">
-      <h1>Gioca e Vinci con Solana</h1>
-      <p>I migliori giochi on-chain su Solana. Collegati con il tuo wallet, inizia a giocare e divertiti!</p>
+      <h1>Giochi On-Chain su Solana</h1>
+      <p>Prova i nostri giochi on-chain sviluppati sulla blockchain Solana. Gioca, divertiti e vinci!</p>
     </section>
     
     <!-- Games Section -->
     <section class="games-section">
-      <h2 class="section-title">I nostri giochi</h2>
       <div class="games-grid">
         <!-- Slots -->
         <div class="game-card" onclick="openGame('slots')">
@@ -327,7 +319,7 @@
           </div>
           <div class="game-info">
             <div class="game-title">Slots</div>
-            <div class="game-subtitle">On-chain slot machine</div>
+            <div class="game-description">Gira i rulli e cerca di ottenere combinazioni vincenti in questa slot machine!</div>
           </div>
         </div>
         
@@ -338,7 +330,7 @@
           </div>
           <div class="game-info">
             <div class="game-title">Dice</div>
-            <div class="game-subtitle">Punta su un range di numeri</div>
+            <div class="game-description">Scommetti sul risultato del lancio di dadi e vinci fino a 100x la tua puntata!</div>
           </div>
         </div>
         
@@ -349,7 +341,7 @@
           </div>
           <div class="game-info">
             <div class="game-title">Flip</div>
-            <div class="game-subtitle">Testa o croce</div>
+            <div class="game-description">Lancia una moneta e raddoppia la tua puntata se indovini il risultato!</div>
           </div>
         </div>
         
@@ -357,11 +349,10 @@
         <div class="game-card" onclick="openGame('crash')">
           <div class="game-image">
             <img src="https://play.gamba.so/assets/crash.png" alt="Crash">
-            <div class="new-badge">NUOVO</div>
           </div>
           <div class="game-info">
             <div class="game-title">Crash</div>
-            <div class="game-subtitle">Preleva prima dello schianto</div>
+            <div class="game-description">Guarda il moltiplicatore salire e ritira prima che si schianti!</div>
           </div>
         </div>
         
@@ -372,7 +363,7 @@
           </div>
           <div class="game-info">
             <div class="game-title">Blackjack</div>
-            <div class="game-subtitle">Vinci con 21 o meno</div>
+            <div class="game-description">Gioca a blackjack contro il banco e cerca di ottenere 21 o un valore più alto del banco!</div>
           </div>
         </div>
         
@@ -383,7 +374,7 @@
           </div>
           <div class="game-info">
             <div class="game-title">HiLo</div>
-            <div class="game-subtitle">Più alto o più basso?</div>
+            <div class="game-description">Indovina se la prossima carta sarà più alta o più bassa!</div>
           </div>
         </div>
       </div>
@@ -391,7 +382,7 @@
     
     <!-- Footer -->
     <footer class="footer">
-      <p>&copy; 2025 Lisprocoin Games. Tutti i diritti riservati.</p>
+      <p>&copy; 2025 Lisprocoin Gaming. Tutti i diritti riservati.</p>
     </footer>
   </div>
   
@@ -425,6 +416,9 @@
       setTimeout(() => {
         document.getElementById('loading').style.display = 'none';
       }, 1500);
+      
+      // Aggiorna il testo del pulsante
+      walletBtn.textContent = 'Connetti Wallet';
       
       // Controlla se il wallet è già connesso
       checkWalletConnection();
