@@ -3,40 +3,265 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lisprocoin Gaming - Giochi On-Chain su Solana</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Lisprocoin - Play and Win</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.19.16/lib/index.iife.min.js"></script>
   <style>
     :root {
-      --primary-color: #8851ff;
-      --secondary-color: #45caff;
-      --background-color: #0D0E12;
-      --card-bg: #1A1B23;
-      --text-color: #FFFFFF;
+      --main-bg: #040404;
+      --card-bg: #0c0c0c;
+      --card-hover: #151515;
+      --text: #ffffff;
+      --accent: #16F795;
+      --button: #16F795;
+      --button-text: #000000;
+      --border-radius: 10px;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
     
     body {
-      margin: 0;
-      padding: 0;
       font-family: 'Inter', sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
+      background-color: var(--main-bg);
+      color: var(--text);
+      line-height: 1.6;
     }
     
-    .loading {
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo img {
+      height: 36px;
+      margin-right: 10px;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .wallet-btn {
+      background-color: var(--button);
+      color: var(--button-text);
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+    }
+    
+    .wallet-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    /* Hero Section */
+    .hero {
+      padding: 50px 0;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #16F795 0%, #16F795 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0.8;
+    }
+    
+    /* Games Section */
+    .games-section {
+      padding: 50px 0;
+    }
+    
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .game-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .game-card:hover {
+      transform: translateY(-10px);
+      background-color: var(--card-hover);
+      box-shadow: 0 10px 30px rgba(22, 247, 149, 0.1);
+    }
+    
+    .game-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #0f0f0f;
+    }
+    
+    .game-image img {
+      width: 75%;
+      height: 75%;
+      object-fit: contain;
+    }
+    
+    .game-info {
+      padding: 20px;
+    }
+    
+    .game-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .game-subtitle {
+      font-size: 14px;
+      opacity: 0.6;
+    }
+    
+    .new-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--accent);
+      color: #000;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 30px 0;
+      margin-top: 50px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    
+    /* Game Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: var(--card-bg);
+      width: 95%;
+      max-width: 1000px;
+      height: 85vh;
+      border-radius: var(--border-radius);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 30px;
+      height: 30px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      font-size: 16px;
+    }
+    
+    .game-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--main-bg);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      text-align: center;
+      z-index: 2000;
     }
     
     .spinner {
-      border: 4px solid rgba(255, 255, 255, 0.1);
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(22, 247, 149, 0.2);
+      border-top: 5px solid var(--accent);
       border-radius: 50%;
-      border-top: 4px solid var(--primary-color);
-      width: 40px;
-      height: 40px;
       animation: spin 1s linear infinite;
       margin-bottom: 20px;
     }
@@ -46,245 +271,141 @@
       100% { transform: rotate(360deg); }
     }
     
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: rgba(26, 27, 35, 0.8);
-      backdrop-filter: blur(10px);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-    }
-    
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: flex;
-      align-items: center;
-    }
-    
-    .logo img {
-      height: 32px;
-      margin-right: 10px;
-    }
-    
-    .wallet-button {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .wallet-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    
-    .main-content {
-      padding: 6rem 2rem 2rem;
-    }
-    
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-    
-    .game-card {
-      background-color: var(--card-bg);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    
-    .game-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-    
-    .game-image {
-      width: 100%;
-      height: 200px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-    }
-    
-    .game-info {
-      padding: 1rem;
-    }
-    
-    .game-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-    
-    .game-description {
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-    
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.8);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .modal-content {
-      background-color: var(--card-bg);
-      width: 90%;
-      max-width: 900px;
-      height: 80vh;
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .close-button {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1rem;
-      z-index: 10;
-    }
-    
-    .game-frame {
-      width: 100%;
-      height: 100%;
-      border: none;
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+      
+      .hero p {
+        font-size: 16px;
+      }
+      
+      .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+      
+      .game-title {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="loading" class="loading">
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading">
     <div class="spinner"></div>
-    <h2>Caricamento della piattaforma Lisprocoin...</h2>
+    <h2>Caricamento Lisprocoin Games...</h2>
   </div>
   
-  <div id="app" style="display: none;">
+  <div class="container">
+    <!-- Header -->
     <header class="header">
       <div class="logo">
         <img src="https://raw.githubusercontent.com/15-Lippo/new/master/logo.png" alt="Lisprocoin Logo">
-        Lisprocoin Gaming
+        Lisprocoin Games
       </div>
-      <button id="wallet-button" class="wallet-button">Connetti Wallet</button>
+      <div class="header-right">
+        <button class="wallet-btn" id="wallet-btn">Connetti Wallet</button>
+      </div>
     </header>
     
-    <main class="main-content">
-      <h1>Giochi On-Chain su Solana</h1>
-      <p>Prova i nostri giochi on-chain sviluppati sulla blockchain Solana. Gioca, divertiti e vinci!</p>
-      
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Gioca e Vinci con Solana</h1>
+      <p>I migliori giochi on-chain su Solana. Collegati con il tuo wallet, inizia a giocare e divertiti!</p>
+    </section>
+    
+    <!-- Games Section -->
+    <section class="games-section">
+      <h2 class="section-title">I nostri giochi</h2>
       <div class="games-grid">
+        <!-- Slots -->
         <div class="game-card" onclick="openGame('slots')">
-          <div class="game-image" style="background-color: #2A2C36;">
-            <img src="https://play.gamba.so/assets/slots.png" style="width: 100%; height: 100%; object-fit: contain;">
+          <div class="game-image">
+            <img src="https://play.gamba.so/assets/slots.png" alt="Slots">
           </div>
           <div class="game-info">
             <div class="game-title">Slots</div>
-            <div class="game-description">Gira i rulli e cerca di ottenere combinazioni vincenti in questa slot machine!</div>
+            <div class="game-subtitle">On-chain slot machine</div>
           </div>
         </div>
         
+        <!-- Dice -->
         <div class="game-card" onclick="openGame('dice')">
-          <div class="game-image" style="background-color: #2A2C36;">
-            <img src="https://play.gamba.so/assets/dice.png" style="width: 100%; height: 100%; object-fit: contain;">
+          <div class="game-image">
+            <img src="https://play.gamba.so/assets/dice.png" alt="Dice">
           </div>
           <div class="game-info">
             <div class="game-title">Dice</div>
-            <div class="game-description">Scommetti sul risultato del lancio di dadi e vinci fino a 100x la tua puntata!</div>
+            <div class="game-subtitle">Punta su un range di numeri</div>
           </div>
         </div>
         
+        <!-- Flip -->
         <div class="game-card" onclick="openGame('flip')">
-          <div class="game-image" style="background-color: #2A2C36;">
-            <img src="https://play.gamba.so/assets/flip.png" style="width: 100%; height: 100%; object-fit: contain;">
+          <div class="game-image">
+            <img src="https://play.gamba.so/assets/flip.png" alt="Flip">
           </div>
           <div class="game-info">
             <div class="game-title">Flip</div>
-            <div class="game-description">Lancia una moneta e raddoppia la tua puntata se indovini il risultato!</div>
+            <div class="game-subtitle">Testa o croce</div>
           </div>
         </div>
         
-        <div class="game-card" onclick="openGame('blackjack')">
-          <div class="game-image" style="background-color: #2A2C36;">
-            <img src="https://play.gamba.so/assets/blackjack.png" style="width: 100%; height: 100%; object-fit: contain;">
-          </div>
-          <div class="game-info">
-            <div class="game-title">Blackjack</div>
-            <div class="game-description">Gioca a blackjack contro il banco e cerca di ottenere 21 o un valore più alto del banco!</div>
-          </div>
-        </div>
-        
+        <!-- Crash -->
         <div class="game-card" onclick="openGame('crash')">
-          <div class="game-image" style="background-color: #2A2C36;">
-            <img src="https://play.gamba.so/assets/crash.png" style="width: 100%; height: 100%; object-fit: contain;">
+          <div class="game-image">
+            <img src="https://play.gamba.so/assets/crash.png" alt="Crash">
+            <div class="new-badge">NUOVO</div>
           </div>
           <div class="game-info">
             <div class="game-title">Crash</div>
-            <div class="game-description">Guarda il moltiplicatore salire e ritira prima che si schianti!</div>
+            <div class="game-subtitle">Preleva prima dello schianto</div>
           </div>
         </div>
         
+        <!-- Blackjack -->
+        <div class="game-card" onclick="openGame('blackjack')">
+          <div class="game-image">
+            <img src="https://play.gamba.so/assets/blackjack.png" alt="Blackjack">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Blackjack</div>
+            <div class="game-subtitle">Vinci con 21 o meno</div>
+          </div>
+        </div>
+        
+        <!-- HiLo -->
         <div class="game-card" onclick="openGame('hilo')">
-          <div class="game-image" style="background-color: #2A2C36;">
-            <img src="https://play.gamba.so/assets/hilo.png" style="width: 100%; height: 100%; object-fit: contain;">
+          <div class="game-image">
+            <img src="https://play.gamba.so/assets/hilo.png" alt="HiLo">
           </div>
           <div class="game-info">
             <div class="game-title">HiLo</div>
-            <div class="game-description">Indovina se la prossima carta sarà più alta o più bassa!</div>
+            <div class="game-subtitle">Più alto o più basso?</div>
           </div>
         </div>
       </div>
-    </main>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2025 Lisprocoin Games. Tutti i diritti riservati.</p>
+    </footer>
   </div>
   
-  <div id="game-modal" class="modal">
+  <!-- Game Modal -->
+  <div class="modal" id="game-modal">
     <div class="modal-content">
-      <button class="close-button" onclick="closeGame()">✕</button>
+      <div class="modal-close" onclick="closeGame()">✕</div>
       <iframe id="game-frame" class="game-frame" src="" frameborder="0"></iframe>
     </div>
   </div>
-
+  
   <script>
     // Configurazione della piattaforma
-    const PLATFORM_CONFIG = {
-      RPC_ENDPOINT: "https://api.mainnet-beta.solana.com",
-      CREATOR_ADDRESS: "EPqPP8mSk4bFNfk5cAg9hGR6XPLwh9Rp3Lo4wDiLEdRZ",
-      CREATOR_FEE: 0.01,
-      JACKPOT_FEE: 0.001,
-      REFERRAL_FEE: 0.0025
-    };
+    const CREATOR_ADDRESS = "EPqPP8mSk4bFNfk5cAg9hGR6XPLwh9Rp3Lo4wDiLEdRZ";
     
     // Mappatura dei giochi e loro URL
     const GAMES = {
@@ -296,18 +417,69 @@
       hilo: "https://play.gamba.so/hilo"
     };
     
-    // Funzione per aprire un gioco in modalità
+    // Wallet button
+    const walletBtn = document.getElementById('wallet-btn');
+    
+    // Caricamento del sito
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        document.getElementById('loading').style.display = 'none';
+      }, 1500);
+      
+      // Controlla se il wallet è già connesso
+      checkWalletConnection();
+    });
+    
+    // Gestione del wallet
+    walletBtn.addEventListener('click', function() {
+      connectWallet();
+    });
+    
+    // Controlla lo stato della connessione al wallet
+    function checkWalletConnection() {
+      if (window.solana && window.solana.isPhantom) {
+        if (window.solana.isConnected) {
+          walletBtn.textContent = formatWalletAddress(window.solana.publicKey.toString());
+        }
+      }
+    }
+    
+    // Connessione al wallet
+    async function connectWallet() {
+      if (window.solana && window.solana.isPhantom) {
+        try {
+          walletBtn.textContent = 'Connessione...';
+          
+          const { publicKey } = await window.solana.connect();
+          walletBtn.textContent = formatWalletAddress(publicKey.toString());
+        } catch (err) {
+          console.error(err);
+          walletBtn.textContent = 'Connetti Wallet';
+        }
+      } else {
+        window.open('https://phantom.app/', '_blank');
+      }
+    }
+    
+    // Formatta l'indirizzo del wallet
+    function formatWalletAddress(address) {
+      return address.substring(0, 4) + '...' + address.substring(address.length - 4);
+    }
+    
+    // Apri il gioco
     function openGame(gameId) {
       const modal = document.getElementById('game-modal');
       const gameFrame = document.getElementById('game-frame');
-      const gameUrl = GAMES[gameId] + "?creator=" + PLATFORM_CONFIG.CREATOR_ADDRESS;
+      
+      // Aggiungi il parametro creator
+      const gameUrl = GAMES[gameId] + '?creator=' + CREATOR_ADDRESS;
       
       gameFrame.src = gameUrl;
       modal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
     
-    // Funzione per chiudere il gioco
+    // Chiudi il gioco
     function closeGame() {
       const modal = document.getElementById('game-modal');
       const gameFrame = document.getElementById('game-frame');
@@ -317,33 +489,11 @@
       document.body.style.overflow = 'auto';
     }
     
-    // Simulazione di caricamento
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-      }, 1000);
-    });
-    
-    // Gestione del wallet
-    document.getElementById('wallet-button').addEventListener('click', function() {
-      // Apre Phantom o altro wallet
-      if (window.solana && window.solana.isPhantom) {
-        window.solana.connect();
-        this.textContent = 'Connessione...';
-        
-        window.solana.on('connect', function() {
-          document.getElementById('wallet-button').textContent = 'Wallet Connesso';
-        });
-      } else {
-        window.open('https://phantom.app/', '_blank');
-      }
-    });
-    
-    // Controlla se il wallet è già connesso all'avvio
-    window.addEventListener('load', function() {
-      if (window.solana && window.solana.isPhantom && window.solana.isConnected) {
-        document.getElementById('wallet-button').textContent = 'Wallet Connesso';
+    // Chiudi il gioco quando si clicca fuori dalla finestra
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('game-modal');
+      if (event.target === modal) {
+        closeGame();
       }
     });
   </script>
